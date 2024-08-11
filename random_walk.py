@@ -91,16 +91,16 @@ class Analysis:
 
         return final_distance_per_stepsize
     
-    def CustomFunction(self, x, a, b):
+    def ExponentFunction(self, x, a, b):
         '''mathematical average displacement function to help curve fit'''
         return a * x**b
     
     def CurveFit(self, x_data, y_data, initial_guess):
         '''fits observed data to mathematical equation'''
         
-        popt, pcov = sp.optimize.curve_fit(self.CustomFunction, x_data, y_data, p0 = initial_guess)
+        popt, pcov = sp.optimize.curve_fit(self.ExponentFunction, x_data, y_data, p0 = initial_guess)
         
-        y_fit = self.CustomFunction(x_data, *popt)
+        y_fit = self.ExponentFunction(x_data, *popt)
         rmse = np.sqrt(np.mean((y_data - y_fit) ** 2))
         ss_res = np.sum((y_data - y_fit) ** 2)
         ss_tot = np.sum((y_data - np.mean(y_data)) ** 2)
@@ -119,7 +119,7 @@ class Analysis:
         
         plt.figure()
         plt.scatter(data[:,0], data[:,1],s=1, color='indigo')
-        plt.plot(data[:,0], self.CustomFunction(data[:,0], *popt), label='Fitted curve', color='purple')
+        plt.plot(data[:,0], self.ExponentFunction(data[:,0], *popt), label='Fitted curve', color='purple')
         
         a_opt, b_opt = popt
         equation_text1 = f'Fitted curve(purple): {a_opt:.3f} * N^{b_opt:.3f}'
